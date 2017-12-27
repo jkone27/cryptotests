@@ -1,0 +1,47 @@
+Crypto : 
+    boolean verifySignature(PublicKey pubKey, byte[] message, byte[] signature)
+
+Transaction : 
+new(), new(Transaction tx)
+    void addInput(byte[] prevTxHash, int outputIndex)
+    void addOutput(double value, PublicKey address)
+    void removeInput(int index) 
+    void removeInput(UTXO ut)
+    byte[] getRawDataToSign(int index)
+    void addSignature(byte[] signature, int index)
+    byte[] getRawTx()
+    void finalize()
+    void setHash(byte[] h)
+    byte[] getHash()
+    int numOutputs() 
+    ArrayList<Input> getInputs()
+    ArrayList<Output> getOutputs()
+    Input getInput(int index)
+    Output getOutput(int index) 
+    int numInputs() 
+
+Input : 
+new(byte[] prevHash, int index)
+    byte[] prevTxHash;
+    int outputIndex;
+    byte[] signature;
+    void addSignature(byte[] sig)
+
+Output:
+new(double v, PublicKey addr)
+    double value;
+    PublicKey address;
+
+UTXO [:Comparable] :
+new(byte[] txHash, int index)
+    byte[] getTxHash()
+    int getIndex()
+
+UTXOPool (hides HashMap<UTXO, Transaction.Output>) :
+new(), new(UTXOPool utxoPool)
+    void addUTXO(UTXO utxo, Transaction.Output txOut)
+    void removeUTXO(UTXO utxo)
+    Transaction.Output getTxOutput(UTXO ut)
+    boolean contains(UTXO utxo)
+    ArrayList<UTXO> getAllUTXO()
+
