@@ -67,10 +67,11 @@ public class TxHandler {
     }
 
     private boolean verifyInputSignature(Transaction tx, Transaction.Input i, int counter){
-        PublicKey outputAddress = tx.getOutput(i.outputIndex).address;
+        UTXO utxo = new UTXO(i.prevTxHash, i.outputIndex);
+        Transaction.Output output = _utxoPool.getTxOutput(utxo);
         byte[] message = tx.getRawDataToSign(counter);
         byte[] inputSignature = i.signature;
-        return Crypto.verifySignature(outputAddress, message, inputSignature);
+        return Crypto.verifySignature(output.address, message, inputSignature);
     }
 
     /**
@@ -90,7 +91,7 @@ public class TxHandler {
                 
                 int outputsCounter = 0;
                 for(Transaction.Output o : t.getOutputs())
-                    _utxoPool.addUTXO(new UTXO(t.getHash(), outputsCounter++), t.getOutput(outputsCounter));
+                    _utxoPool.addUTXO(new UTXO(t.getHash(), outputsCounter++), o);
 
                 validTransactions.add(t);
             }
